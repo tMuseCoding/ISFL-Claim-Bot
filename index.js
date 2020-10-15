@@ -9,7 +9,7 @@ let prefix = config.prefix
 
 client.once('ready', async () => {
 	console.log('ISFL Claim Bot Loaded!');
-	
+
 	await mongo().then((mongoose) => {
 		try {
 			console.log('Connected to mongo!');
@@ -20,43 +20,47 @@ client.once('ready', async () => {
 });
 
 client.on('message', async message => {
-	if (!message.content.startsWith(prefix) || message.author.bot)	return;
-	
-	let args = message.content.slice(prefix.length).trim().split(/ +/);	
+	if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+	let args = message.content.slice(prefix.length).trim().split(/ +/);
 	let command = args.shift().toLowerCase();
-		
+
 	if (command === 'ping') {
 		message.channel.send('Pong!');
 	}
-	
+
 	if (command === 'invite') {
 		replyWithInvite(message);
 	}
-	
+
 	if (command === 'channel') {
 		let channel = getChannelFromMention(args[0])
 		if (channel == null) {
 			message.reply("I can't see that channel!");
 			return;
-			} else {
-				await mongo().then(async (mongoose) => {
-					try {
-						await new claimchannelSchema({
-							_id: message.guild.id,
-							channelId: channel,
-						}).save()
-						channel.send("Found it! I will post the claims I find in here.")
-					} catch(e) {
-						console.log(e)
-						message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
-					}finally {
-						mongoose.connection.close();
-					}
-				});
-				
+		} else {
+			await mongo().then(async (mongoose) => {
+				try {
+					await claimchannelSchema.findOneAndUpdate({
+						_id: message.guild.id
+					}, {
+						_id: message.guild.id,
+						channelId: channel,
+					}, {
+						upsert: true
+					})
+					channel.send("Found it! I will post the claims I find in here.")
+				} catch (e) {
+					console.log(e)
+					message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
+				} finally {
+					mongoose.connection.close();
+				}
+			});
+
 		}
 	}
-	
+
 	if (command === 'claim') {
 		if (claimChannel == null) {
 			message.reply(`You have to set a channel for me to post the claims first!\nUse ${prefix}channel #tag-a-channel to set a channel for me to post in.`);
@@ -69,28 +73,28 @@ client.on('message', async message => {
 
 function getChannelFromMention(mention) {
 	if (!mention) return;
-	
+
 	if (mention.startsWith('<#') && mention.endsWith('>')) {
-		mention = mention.slice(2,-1)
-		
+		mention = mention.slice(2, -1)
+
 		if (mention.startsWith('!')) {
-		mention = mention.slice(1);
+			mention = mention.slice(1);
 		}
-		
+
 		return client.channels.cache.get(mention)
 	}
 }
 
 async function replyWithInvite(message) {
 	const embedInvite = new Discord.MessageEmbed()
-	.setColor('#0099ff')
-	.setTitle('Invite me!')
-	.setURL('https://discord.com/api/oauth2/authorize?client_id=766223518659772416&permissions=149504&scope=bot')
-	.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
-	.setDescription('A Bot to automatically post the newest claims from the ISFL Claim Thread!')
-	.setThumbnail('https://i.imgur.com/fPW1MS5.png')
-	.setTimestamp()
-	.setFooter('Invite send at: ');
+		.setColor('#0099ff')
+		.setTitle('Invite me!')
+		.setURL('https://discord.com/api/oauth2/authorize?client_id=766223518659772416&permissions=149504&scope=bot')
+		.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
+		.setDescription('A Bot to automatically post the newest claims from the ISFL Claim Thread!')
+		.setThumbnail('https://i.imgur.com/fPW1MS5.png')
+		.setTimestamp()
+		.setFooter('Invite send at: ');
 
 	message.channel.send(embedInvite);
 }
