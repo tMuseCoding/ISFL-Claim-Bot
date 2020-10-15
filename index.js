@@ -6,6 +6,11 @@ const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
 const claimthreadSchema = require('./schemas/claimthread-schema')
 
+const puppeteer = require('puppeteer');
+const express = require('express');
+const app = express();
+const port = 3000;
+
 const prefix = config.prefix
 const claimChannelCache = {}
 
@@ -195,10 +200,34 @@ async function checkThreads() {
 	for (const value of Object.values(threads)) {
 		let url = value.toObject()['_id'] + '&action=lastpost'
 		console.log(`URL: ${url}`)
-		
-		let req = fetch(url)
-		
-		console.log(req)
+
+		app.get('/', async (req, res) => {
+			const { url } = req.query;
+			if (!url) {
+				res.status(400).send("Bad request: 'url' param is missing!");
+				return;
+			}
+
+			try {
+				const html = await getPageHTML(url);
+
+				res.status(200).send(html);
+			} catch (error) {
+				res.status(500).send(error);
+			}
+		});
+
+		const getPageHTML = async (pageUrl) => {
+			const browser = await puppeteer.launch();
+
+			const page = await browser.newPage();
+
+			const newLink = await page.goto(pageUrl);
+
+			await browser.close();
+
+			console.log(newLink.url)
+		}
 	}
 }
 
