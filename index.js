@@ -197,7 +197,7 @@ async function checkThreads() {
 	for (const value of Object.values(threads)) {
 		let url = value.toObject()['_id']
 		console.log(`URL: ${url}`)
-		let req = request(url)
+		let req = request(url+'&action=lastpost')
 		console.log(`HREF: ${req.href}`)
 	}
 
