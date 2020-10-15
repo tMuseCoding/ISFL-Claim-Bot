@@ -5,9 +5,6 @@ const config = require('./config.json')
 const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
 const claimthreadSchema = require('./schemas/claimthread-schema')
-const jquery = require('jquery')
-
-const request = require('request')
 
 const prefix = config.prefix
 const claimChannelCache = {}
@@ -23,7 +20,7 @@ client.once('ready', async () => {
 		}
 	});
 
-	client.setInterval(checkThreads, 10000);
+	client.setInterval(checkThreads, 5000);
 });
 
 client.on('message', async message => {
@@ -198,12 +195,8 @@ async function checkThreads() {
 	for (const value of Object.values(threads)) {
 		let url = value.toObject()['_id'] + '&action=lastpost'
 		console.log(`URL: ${url}`)
-
-		let jq = new jquery();
-		let req = jq.load(url)
-		req.onload = function() {
-			console.log(req)
-		}
+		
+		let req = fetch(url)
 	}
 }
 
