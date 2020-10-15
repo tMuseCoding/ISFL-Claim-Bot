@@ -17,7 +17,7 @@ client.once('ready', async () => {
 		} finally {
 			mongoose.connection.close();
 		}
-	}
+	});
 });
 
 client.on('message', async message => {
