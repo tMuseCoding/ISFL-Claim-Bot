@@ -42,7 +42,7 @@ client.on('message', async message => {
 			return;
 		} else {
 			cache[message.guild.id] = [channel]
-			
+
 			await mongo().then(async (mongoose) => {
 				try {
 					await claimchannelSchema.findOneAndUpdate({
@@ -67,22 +67,16 @@ client.on('message', async message => {
 
 	if (command === 'claim') {
 		let data = cache[message.guild.id]
-		let channelId = data[0]
-		let claimChannel = message.guild.channels.cache.get(channelId)
-		
-		if (!data || !claimChannel || !channelId) {
-			console.log('FETCHING FROM DATABASE')
-			await mongo().then(async (mongoose) => {
-				try {
-					const result = await claimchannelSchema.findOne({ _id: message.guild.id })
-					
-					cache[message.guild.id] = data = [result.channelId]
-				} finally {
-					mongoose.connection.close()
-				}
-			});
+
+		if (!data) {
+			fetchChannelFromDb(message)
 		}
 		
+		data = cache[message.guild.id]
+		
+		const channelId = data[0]
+		const claimChannel = message.guild.channels.cache.get(channelId)
+
 		claimChannel.send("Posting claims in here. This is a fake claim blabla")
 	}
 });
@@ -99,6 +93,19 @@ function getChannelFromMention(mention) {
 
 		return client.channels.cache.get(mention)
 	}
+}
+
+async function fetchChannelFromDb(message) {
+	console.log('FETCHING FROM DATABASE')
+	await mongo().then(async (mongoose) => {
+		try {
+			const result = await claimchannelSchema.findOne({ _id: message.guild.id })
+
+			cache[message.guild.id] = data = [result.channelId]
+		} finally {
+			mongoose.connection.close()
+		}
+	});
 }
 
 async function replyWithInvite(message) {
