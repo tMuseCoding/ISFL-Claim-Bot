@@ -188,18 +188,22 @@ async function checkThreads() {
 
 	await mongo().then(async (mongoose) => {
 		try {
-			
+
 			let result = await claimthreadSchema.find()
 			threads = result
-					
+
 		} finally {
 			mongoose.connection.close()
 		}
 	});
-	
-	for (const [key, value] of Object.entries(threads))
-	console.log(`${key}: ${value}`)
-	
+
+	for (const [key, value] of Object.entries(threads)) {
+		console.log(`${key}: ${value}`)
+		for (const [key, value] of Object.entries(value)) {
+			console.log(`${key}: ${value}`)
+		}
+	}
+
 
 
 
