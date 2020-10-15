@@ -2,6 +2,8 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 let prefix = 'ct!';
 
+let channelId;
+
 client.once('ready', () => {
 	console.log('Ping Pong Bot Loaded!');
 });
@@ -19,6 +21,16 @@ client.on('message', message => {
 	
 	if (command === 'invite') {
 		replyWithInvite(message);
+	}
+	
+	if (command === 'channel') {
+		let channel = client.channels.cache.get(args[0]);
+		if (channel == null) {
+			message.reply("I can't see that channel!");
+			return;
+			} else {
+				channel.send("I found it!");
+		}
 	}
 });
 
