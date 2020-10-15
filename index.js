@@ -26,8 +26,9 @@ client.on('message', async message => {
 
 	let prefix = prefixCache[guild.id]
 
-	if (!prefix)
-		loadPrefixFromDbOrDefaultFromConfig()
+	if (!prefix) {
+		loadPrefixFromDbOrDefaultFromConfig()		
+	}
 
 	if (!content.startsWith(prefix) || author.bot) return;
 
@@ -108,7 +109,7 @@ client.on('message', async message => {
 					upsert: true
 				})
 				channel.send(`Alright! My new prefix will be ${args[0]}`)
-				prefix[guild.id] = args[0]
+				prefix[guild.id] = prefix = args[0]
 			} catch (e) {
 				console.log(e)
 				message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot, please contact tMuse#0001")
@@ -149,12 +150,12 @@ client.on('message', async message => {
 			try {
 				const result = await prefixSchema.findOne({ _id: guild.id })
 
-				prefixCache[guild.id] = result.prefix
+				prefixCache[guild.id] = prefix = result.prefix
 			} catch(e) {
-				prefixCache[guild.id] = config.prefix
+				console.log('pulled prefix from config')
+				prefixCache[guild.id] = prefix = config.prefix
 			} finally {
 				mongoose.connection.close()
-				prefix = prefixCache[guild.id]
 			}
 		});
 	}
