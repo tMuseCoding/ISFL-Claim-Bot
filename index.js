@@ -117,7 +117,9 @@ client.on('message', async message => {
 			try {
 				const result = await claimchannelSchema.findOne({ _id: guild.id })
 
-				return claimChannelCache[guild.id] = result.channelId
+				claimChannelCache[guild.id] = result.channelId
+				
+				return result.channelId
 			} finally {
 				mongoose.connection.close()
 			}
