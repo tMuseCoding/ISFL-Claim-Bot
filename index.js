@@ -184,21 +184,21 @@ client.on('message', async message => {
 
 
 async function checkThreads() {
-	let threads = {}
+	let threads = [{}]
 
 	await mongo().then(async (mongoose) => {
 		try {
 			const result = await claimthreadSchema.find()
 
-			threads[result._id] = result.claimthread
+			threads[result._id] = result
 		} finally {
 			mongoose.connection.close()
 		}
 	});
 
-	console.log(threads)
-	for (let thread in threads)
-	console.log(thread)
+	threads.forEach(thread => {
+		console.log(thread.claimthread)
+	});
 
 	console.log(url)
 	let req = request(url)
