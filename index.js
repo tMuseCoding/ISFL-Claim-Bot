@@ -197,11 +197,8 @@ async function checkThreads() {
 		}
 	});
 	
-	for (thread in threads) {
-		
-	console.log(url)
-	let req = request(url)
-	console.log(req.href)
+	for (let thread in threads) {
+		console.log(thread)
 	}
 
 
