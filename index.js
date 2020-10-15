@@ -204,7 +204,7 @@ async function checkThreads() {
 				console.log(`REDIRECT: ${req.responseURL}`)
 			}
 		}
-		req.open("GET",url+'&action=lastpost',true)
+		req.open("GET",url+'&action=lastpost',false)
 		req.send();
 	}
 
