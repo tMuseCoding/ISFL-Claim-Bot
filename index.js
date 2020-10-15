@@ -194,7 +194,7 @@ async function checkThreads() {
 	});
 
 	for (const value of Object.values(threads)) {
-		console.log(`URL: `+value.toObject()['claimthread'])
+		console.log(`URL: `+value.toObject()['_id'])
 	}
 
 
