@@ -198,7 +198,7 @@ async function checkThreads() {
 	});
 	
 	for (let thread in threads) {
-		console.log(thread)
+		console.log(typeof thread)
 	}
 
 
