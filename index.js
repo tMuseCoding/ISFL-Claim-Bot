@@ -202,8 +202,6 @@ async function checkThreads() {
 
 		const _include_headers = function(body, response, resolveWithFullResponse) {
 			return {
-				'headers': response.headers,
-				'data': body,
 				'finalUrl': response.request.uri.href
 			};
 		};
@@ -212,7 +210,6 @@ async function checkThreads() {
 			uri: url,
 			followAllRedirects: true,
 			method: 'get',
-			gzip: true,
 			transform: _include_headers,
 			headers: {
 				'User-Agent': userAgent
