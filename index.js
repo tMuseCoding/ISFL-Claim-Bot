@@ -184,13 +184,13 @@ client.on('message', async message => {
 
 
 async function checkThreads() {
-	let threads = []
+	let threads
 
 	await mongo().then(async (mongoose) => {
 		try {
 			const result = await claimthreadSchema.find()
 
-			threads.push(result)
+			threads = result
 		} finally {
 			mongoose.connection.close()
 		}
