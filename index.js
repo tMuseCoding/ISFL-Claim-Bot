@@ -198,8 +198,8 @@ async function checkThreads() {
 
 	console.log(threads)
 	for (let thread in threads) {
-		for (let key, value in thread) {
-			console.log(`${key} + ${value}`)
+		for (let key in thread) {
+			console.log(key)
 		}
 	}
 
