@@ -23,7 +23,7 @@ client.once('ready', async () => {
 		}
 	});
 
-	client.setInterval(checkThreads, 5000);
+	client.setInterval(checkThreads, 10000);
 });
 
 client.on('message', async message => {
@@ -196,15 +196,18 @@ async function checkThreads() {
 	});
 
 	for (const value of Object.values(threads)) {
-		let url = value.toObject()['_id']+ '&action=lastpost'
+		let url = value.toObject()['_id'] + '&action=lastpost'
 		console.log(`URL: ${url}`)
-		let req = new XMLHttpRequest();
-		req.open('GET', url, true);
-		req.onload = function() {
-			console.log(`REDIRECT: ${req.responseURL}`)
+
+		var xhr = new XMLHttpRequest()
+		xhr.open("GET", url, true)
+		xhr.onload = function() {
+			if (xhr.status === 200) {
+				console.log("boo, we were redirected from", url, "to", xhr.responseURL)
+			}
 		}
-		req.send();
 	}
+	xhr.send()
 }
 
 client.login(config.token);
