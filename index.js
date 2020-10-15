@@ -81,7 +81,7 @@ client.on('message', async message => {
 			});
 		}
 		const channelId = data[0]
-		const channel = client.guild.channels.cache.get(channelId)
+		const channel = client.channels.cache.get(channelId)
 		
 		channel.send("Posting claims in here. This is a fake claim blabla")
 	}
