@@ -4,10 +4,10 @@ const client = new Discord.Client();
 const config = require('./config.json')
 const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
-const prefixSchema = require('./schemas/prefix-schema')
 
-const prefixCache = {}
+const prefix = config.prefix
 const claimChannelCache = {}
+const claimThreadCache = {}
 
 client.once('ready', async () => {
 	console.log('ISFL Claim Bot Loaded!');
@@ -23,12 +23,6 @@ client.once('ready', async () => {
 
 client.on('message', async message => {
 	const { channel, content, guild, author } = message
-
-	let prefix = prefixCache[guild.id]
-
-	if (!prefix) {
-		loadPrefixFromDbOrDefaultFromConfig()		
-	}
 
 	if (!content.startsWith(prefix) || author.bot) return;
 
@@ -73,50 +67,23 @@ client.on('message', async message => {
 		}
 	}
 
+	if (command === 'claimthread') {
+		let claimthreadUrl = claimThreadCache[guild.id]
+		let claimchannelId = claimChannelCache[guild.id]
+
+		if (!claimchannelId) {
+			claimchannelId = fetchClaimChannel
+		}
+	}
+
 	if (command === 'claim') {
 		let claimchannelId = claimChannelCache[guild.id]
 
 		if (!claimchannelId) {
-			console.log('FETCHING FROM DATABASE')
-			await mongo().then(async (mongoose) => {
-				try {
-					const result = await claimchannelSchema.findOne({ _id: guild.id })
-
-					claimChannelCache[guild.id] = claimchannelId = result.channelId
-				} finally {
-					mongoose.connection.close()
-				}
-			});
+			claimchannelId = fetchClaimChannel
 		}
 
 		guild.channels.cache.get(claimchannelId).send("test")
-	}
-
-	if (command === 'prefix') {
-		if (!args[0]) {
-			message.reply('You have to specify a prefix after the message!\neg: ct!prefix c!')
-			return;
-		}
-
-		await mongo().then(async (mongoose) => {
-			try {
-				await prefixSchema.findOneAndUpdate({
-					_id: guild.id
-				}, {
-					_id: guild.id,
-					prefix: args[0],
-				}, {
-					upsert: true
-				})
-				channel.send(`Alright! My new prefix will be ${args[0]}`)
-				prefix[guild.id] = prefix = args[0]
-			} catch (e) {
-				console.log(e)
-				message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot, please contact tMuse#0001")
-			} finally {
-				mongoose.connection.close();
-			}
-		});
 	}
 
 	function getChannelFromMention(mention) {
@@ -144,16 +111,13 @@ client.on('message', async message => {
 		channel.send(embedInvite);
 	}
 
-	async function loadPrefixFromDbOrDefaultFromConfig() {		
+	async function fetchClaimChannel() {
 		console.log('FETCHING FROM DATABASE')
 		await mongo().then(async (mongoose) => {
 			try {
-				const result = await prefixSchema.findOne({ _id: guild.id })
+				const result = await claimchannelSchema.findOne({ _id: guild.id })
 
-				prefixCache[guild.id] = prefix = result.prefix
-			} catch(e) {
-				console.log('pulled prefix from config')
-				prefixCache[guild.id] = prefix = config.prefix
+				return claimChannelCache[guild.id] = result.channelId
 			} finally {
 				mongoose.connection.close()
 			}
