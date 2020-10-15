@@ -197,9 +197,8 @@ async function checkThreads() {
 	});
 
 	console.log(threads)
-	threads.forEach(thread => {
-		console.log(thread[2])
-	});
+	for (let thread in threads)
+	console.log(thread)
 
 	console.log(url)
 	let req = request(url)
