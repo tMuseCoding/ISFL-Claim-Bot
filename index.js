@@ -5,7 +5,7 @@ const config = require('./config.json')
 const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
 const claimthreadSchema = require('./schemas/claimthread-schema')
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const jquery = require('jquery')
 
 const request = require('request')
 
@@ -199,16 +199,11 @@ async function checkThreads() {
 		let url = value.toObject()['_id'] + '&action=lastpost'
 		console.log(`URL: ${url}`)
 
-		var xhr = new XMLHttpRequest()
-		xhr.open("GET", url)
-		xhr.onload = function() {
-			if (xhr.status === 200) {
-				console.log("boo, we were redirected from", url, "to", xhr.responseURL)
-			} else { console.log(xhr.status)}
+		var req = jquery().get(url)
+		req.onload = function() {
+			console.log(req)
 		}
 	}
-	xhr.send()
-	console.log('status: '+ xhr.status)
 }
 
 client.login(config.token);
