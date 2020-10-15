@@ -3,13 +3,12 @@ const client = new Discord.Client();
 
 const config = require('./config.json')
 const mongo = require('./mongo')
+const claimchannelSchema = require('./schemas/claimchannel-schema')
 
 let prefix = config.prefix
 
-let claimChannel = null;
-
 client.once('ready', async () => {
-	console.log('Ping Pong Bot Loaded!');
+	console.log('ISFL Claim Bot Loaded!');
 	
 	await mongo().then((mongoose) => {
 		try {
@@ -40,8 +39,17 @@ client.on('message', async message => {
 			message.reply("I can't see that channel!");
 			return;
 			} else {
-				claimChannel = channel
-				claimChannel.send("I found it! I will post the claims i find in here!");
+				await mongo().then(async (mongoose) => {
+					try {
+						await new claimchannelSchema({
+							_id: message.guild.id,
+							channelId: channel,
+						}).save()
+					} finally {
+						mongoose.connection.close();
+					}
+				});
+				
 		}
 	}
 	
