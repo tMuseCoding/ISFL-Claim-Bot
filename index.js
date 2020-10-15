@@ -7,6 +7,8 @@ const claimchannelSchema = require('./schemas/claimchannel-schema')
 
 let prefix = config.prefix
 
+const cache = {}
+
 client.once('ready', async () => {
 	console.log('ISFL Claim Bot Loaded!');
 
@@ -39,6 +41,8 @@ client.on('message', async message => {
 			message.reply("I can't see that channel!");
 			return;
 		} else {
+			cache[message.guild.id] = [channel]
+			
 			await mongo().then(async (mongoose) => {
 				try {
 					await claimchannelSchema.findOneAndUpdate({
@@ -62,12 +66,22 @@ client.on('message', async message => {
 	}
 
 	if (command === 'claim') {
-		if (claimChannel == null) {
-			message.reply(`You have to set a channel for me to post the claims first!\nUse ${prefix}channel #tag-a-channel to set a channel for me to post in.`);
-			return;
-		} else {
-			claimChannel.send("Here is your new claim!");
+		let data = cache[message.guild.id]
+		
+		if (!data) {
+			console.log('FETCHING FROM DATABASE')
+			await mongo().then(async (mongoose) => {
+				try {
+					const result = await claimchannelSchema.findOne({ _id: message.guild.id })
+					
+					cache[message.guild.id] = data = [result.channelId]
+				} finally {
+					mongoose.connection.close()
+				}
+			});
 		}
+		const channelId = data[0]
+		const channel = guild.channels.cache.get(channelId)
 	}
 });
 
