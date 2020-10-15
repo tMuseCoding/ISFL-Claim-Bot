@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.3.1",
-    "request": "^2.88.2"
+    "mongoose": "^5.10.9",
+    "request": "^2.88.2",
+    "xmlhttprequest": "^1.8.0"
   }
 }
