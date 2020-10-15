@@ -199,7 +199,8 @@ async function checkThreads() {
 		let url = value.toObject()['_id'] + '&action=lastpost'
 		console.log(`URL: ${url}`)
 
-		var req = jquery.load(url)
+		let jq = new jquery();
+		let req = jq.load(url)
 		req.onload = function() {
 			console.log(req)
 		}
