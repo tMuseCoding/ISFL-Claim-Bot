@@ -197,6 +197,7 @@ async function checkThreads() {
 	});
 	
 	for (let thread in threads) {
+		console.log(thread)
 		let url = thread[1]
 		
 		console.log(url)
