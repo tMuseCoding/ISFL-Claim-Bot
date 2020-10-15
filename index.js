@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 let prefix = 'ct!';
 
-let channelId;
+let claimChannel = null;
 
 client.once('ready', () => {
 	console.log('Ping Pong Bot Loaded!');
@@ -28,7 +28,18 @@ client.on('message', async message => {
 			message.reply("I can't see that channel!");
 			return;
 			} else {
-				channel.send("I found it!");
+				claimChannel = channel
+				claimChannel.send("I found it! I will post the claims i find in here!");
+		}
+	}
+	
+	if (command === 'claim') {
+		if (claimChannel == null) {
+			message.reply(`You have to set a channel for me to post the claims first!\n
+			use ${prefix}channel #tag-a-channel to set a channel for me to post in.`);
+			return;
+		} else {
+			claimChannel.send("Here is your new claim!");
 		}
 	}
 });
