@@ -197,8 +197,14 @@ async function checkThreads() {
 	for (const value of Object.values(threads)) {
 		let url = value.toObject()['_id']
 		console.log(`URL: ${url}`)
-		let req = request(url+'&action=lastpost')
-		console.log(`HREF: ${req.href}`)
+		let req = new XMLHttpRequest();
+		req.onreadystatechange = function() {
+			if (req.readyState == 4 && req.status == 200) {
+				console.log(`REDIRECT: ${req.responseURL}`)
+			}
+		}
+		req.open("GET",url,true)
+		req.send();
 	}
 
 
