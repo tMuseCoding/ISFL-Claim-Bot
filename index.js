@@ -199,8 +199,8 @@ async function checkThreads() {
 		console.log(`URL: ${url}`)
 
 		rp(url)
-			.then(function(html) {
-				console.log(html);
+			.then(function(response) {
+				console.log(respone.finalUrl);
 			})
 	}
 }
