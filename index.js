@@ -45,7 +45,10 @@ client.on('message', async message => {
 							_id: message.guild.id,
 							channelId: channel,
 						}).save()
-					} finally {
+						channel.send("Found it! I will post the claims I find in here.")
+					} catch(e) {
+						message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
+					}finally {
 						mongoose.connection.close();
 					}
 				});
