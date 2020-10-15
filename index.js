@@ -143,19 +143,19 @@ client.on('message', async message => {
 		channel.send(embedInvite);
 	}
 
-	async function loadPrefixFromDbOrDefaultFromConfig() {
+	async function loadPrefixFromDbOrDefaultFromConfig() {		
 		console.log('FETCHING FROM DATABASE')
 		await mongo().then(async (mongoose) => {
 			try {
 				const result = await prefixSchema.findOne({ _id: guild.id })
 
-				prefix[guild.id] = result.prefix
+				prefixCache[guild.id] = result.prefix
 			} finally {
 				mongoose.connection.close()
 			}
 		});
 
-		return prefix ? prefix[guild.id] : config.prefix
+		return prefixCache[guild.id] ? prefixCache[guild.id] : config.prefix
 	}
 });
 
