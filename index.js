@@ -190,7 +190,6 @@ async function checkThreads() {
 		try {
 			
 			let result = await claimthreadSchema.find()
-			console.log(typeof result)
 			threads = result
 					
 		} finally {
@@ -198,11 +197,8 @@ async function checkThreads() {
 		}
 	});
 	
-	console.log(threads)
 	console.log(Object.values(threads))
-	for (let thread in threads) {
-		console.log(typeof thread)
-	}
+	console.log(Object.keys(threads))
 
 
 
