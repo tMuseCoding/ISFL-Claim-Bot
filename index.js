@@ -158,7 +158,7 @@ client.on('message', async message => {
 				}
 			});
 		}
-		return prefix ? prefix : config.prefix
+		return prefix ? prefix[guild.id] : config.prefix
 	}
 });
 
