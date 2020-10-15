@@ -200,7 +200,7 @@ async function checkThreads() {
 
 		rp(url)
 			.then(function(response) {
-				console.log(respone.finalUrl);
+				console.log(response.finalUrl);
 			})
 	}
 }
