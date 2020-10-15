@@ -6,8 +6,7 @@ const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
 const prefixSchema = require('./schemas/prefix-schema')
 
-const prefix = loadPrefixFromDbOrDefaultFromConfig()
-
+const prefixCache = {}
 const claimChannelCache = {}
 
 client.once('ready', async () => {
@@ -24,6 +23,12 @@ client.once('ready', async () => {
 
 client.on('message', async message => {
 	const { channel, content, guild, author } = message
+
+	let prefix = prefixCache[guild.id]
+	
+	if (!prefix)
+		prefix = loadPrefixFromDbOrDefaultFromConfig()
+
 	if (!content.startsWith(prefix) || author.bot) return;
 
 	let args = content.slice(prefix.length).trim().split(/ +/);
@@ -91,7 +96,7 @@ client.on('message', async message => {
 			message.reply('You have to specify a prefix after the message!\neg: ct!prefix c!')
 			return;
 		}
-		
+
 		await mongo().then(async (mongoose) => {
 			try {
 				await prefixSchema.findOneAndUpdate({
@@ -153,6 +158,7 @@ client.on('message', async message => {
 				}
 			});
 		}
+		return prefix ? prefix : config.prefix
 	}
 });
 
