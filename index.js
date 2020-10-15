@@ -197,6 +197,8 @@ async function checkThreads() {
 		console.log(`URL: ${url}`)
 		
 		let req = fetch(url)
+		
+		console.log(req)
 	}
 }
 
