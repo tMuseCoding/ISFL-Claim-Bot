@@ -200,7 +200,7 @@ async function checkThreads() {
 		console.log(`URL: ${url}`)
 
 		var xhr = new XMLHttpRequest()
-		xhr.open("GET", url, true)
+		xhr.open("GET", url)
 		xhr.onload = function() {
 			if (xhr.status === 200) {
 				console.log("boo, we were redirected from", url, "to", xhr.responseURL)
@@ -208,6 +208,7 @@ async function checkThreads() {
 		}
 	}
 	xhr.send()
+	console.log('status: '+ xhr.status)
 }
 
 client.login(config.token);
