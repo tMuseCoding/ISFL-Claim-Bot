@@ -8,9 +8,8 @@ client.once('ready', () => {
 	console.log('Ping Pong Bot Loaded!');
 });
 
-client.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot)
-		return;
+client.on('message', async message => {
+	if (!message.content.startsWith(prefix) || message.author.bot)	return;
 	
 	let args = message.content.slice(prefix.length).trim().split(/ +/);	
 	let command = args.shift().toLowerCase();
@@ -24,7 +23,7 @@ client.on('message', message => {
 	}
 	
 	if (command === 'channel') {
-		let channel = client.channels.cache.get(args[0]);
+		let channel = getChannelFromMention(args[0])
 		if (channel == null) {
 			message.reply("I can't see that channel!");
 			return;
@@ -33,6 +32,20 @@ client.on('message', message => {
 		}
 	}
 });
+
+function getChannelFromMention(mention) {
+	if (!mention) return;
+	
+	if (mention.startsWith('<#') && mention.endsWith('>')) {
+		mention = mention.slice(2,-1)
+		
+		if (mention.startsWith('!')) {
+		mention = mention.slice(1);
+		}
+		
+		return client.channels.cache.get(mention)
+	}
+}
 
 async function replyWithInvite(message) {
 	const embedInvite = new Discord.MessageEmbed()
