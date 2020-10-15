@@ -38,8 +38,7 @@ client.on('message', async message => {
 	
 	if (command === 'claim') {
 		if (claimChannel == null) {
-			message.reply(`You have to set a channel for me to post the claims first!\n
-			use ${prefix}channel #tag-a-channel to set a channel for me to post in.`);
+			message.reply(`You have to set a channel for me to post the claims first!\nUse ${prefix}channel #tag-a-channel to set a channel for me to post in.`);
 			return;
 		} else {
 			claimChannel.send("Here is your new claim!");
