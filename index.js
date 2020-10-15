@@ -202,13 +202,9 @@ async function checkThreads() {
 		req.onload = function() {
 			console.log(`REDIRECT: ${req.responseURL}`)
 		}
-		req.open("GET", url   '&action=lastpost', false)
+		req.open("GET", url + '&action=lastpost', false)
 		req.send();
 	}
-
-
-
-
 }
 
 client.login(config.token);
