@@ -6,6 +6,8 @@ const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
 const claimthreadSchema = require('./schemas/claimthread-schema')
 
+const request = require('request')
+
 const prefix = config.prefix
 const claimChannelCache = {}
 const claimThreadCache = {}
@@ -193,8 +195,19 @@ async function checkThreads() {
 			mongoose.connection.close()
 		}
 	});
-
-	console.log(threads)
+	
+	for (let thread in threads) {
+		let url = thread[1]
+		
+		let req = request(url, {
+			method: 'HEAD',
+			followAllRedirects: true
+		}, function(err, response, body) {
+			let newUrl = response.request.href
+			console.log(`${url}\n${newUrl}\n${req}`)
+		})
+	}
+	
 }
 
 client.login(config.token);
