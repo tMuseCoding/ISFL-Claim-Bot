@@ -101,7 +101,7 @@ async function fetchChannelFromDb(message) {
 		try {
 			const result = await claimchannelSchema.findOne({ _id: message.guild.id })
 
-			cache[message.guild.id] = data = [result.channelId]
+			cache[message.guild.id] = [result.channelId]
 		} finally {
 			mongoose.connection.close()
 		}
