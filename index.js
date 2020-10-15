@@ -177,22 +177,24 @@ client.on('message', async message => {
 
 		channel.send(embedInvite);
 	}
-
-	async function checkThreads() {
-		let threads = {}
-
-		await mongo().then(async (mongoose) => {
-			try {
-				const result = await claimthreadSchema.find()
-
-				threads[result._id] = result
-			} finally {
-				mongoose.connection.close()
-			}
-		});
-		
-		console.log(threads)
-	}
 });
+
+
+
+async function checkThreads() {
+	let threads = {}
+
+	await mongo().then(async (mongoose) => {
+		try {
+			const result = await claimthreadSchema.find()
+
+			threads[result._id] = result
+		} finally {
+			mongoose.connection.close()
+		}
+	});
+
+	console.log(threads)
+}
 
 client.login(config.token);
