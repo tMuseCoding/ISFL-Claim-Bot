@@ -199,9 +199,11 @@ async function checkThreads() {
 		console.log(`URL: ${url}`)
 
 		const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0"
-
-		const _include_headers = function(response) {
+		
+		const _include_headers = function(body, response, resolveWithFullResponse) {
 			return {
+				'headers': response.headers,
+				'data': body,
 				'finalUrl': response.request.uri.href
 			};
 		};
@@ -210,13 +212,14 @@ async function checkThreads() {
 			uri: url,
 			followAllRedirects: true,
 			method: 'get',
+			gzip: true,
 			transform: _include_headers,
 			headers: {
 				'User-Agent': userAgent
 			},
 		};
 
-		rp(options).then((response) => {
+		const p1 = rp(options).then((response, error, html) => {
 			console.log(response.finalUrl);
 		});
 	}
