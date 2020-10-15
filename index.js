@@ -199,9 +199,7 @@ async function checkThreads() {
 	});
 	
 	console.log(threads)
-	console.log(threads.claimthread)
-	console.log(threads._id)
-	console.log(threads[2])
+	console.log(Object.values(threads))
 	for (let thread in threads) {
 		console.log(typeof thread)
 	}
