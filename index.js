@@ -116,7 +116,8 @@ client.on('message', async message => {
 						_id: args[0]
 					}, {
 						_id: args[0],
-						title: args[1]
+						title: args[1],
+						lastpost: ""
 					}, {
 						upsert: true
 					})
@@ -194,7 +195,10 @@ async function checkThreads() {
 	});
 
 	for (const value of Object.values(threads)) {
-		console.log(`URL: `+value.toObject()['_id'])
+		let url = value.toObject()['_id']
+		console.log(`URL: ${url}`)
+		let req = request(url)
+		console.log(`HREF: ${req.href}`)
 	}
 
 
