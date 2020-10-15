@@ -199,7 +199,7 @@ async function checkThreads() {
 	console.log(threads)
 	for (let thread in threads) {
 		console.log(thread)
-		let url = thread[1]
+		let url = thread[2]
 		
 		console.log(url)
 		let req = request(url)
