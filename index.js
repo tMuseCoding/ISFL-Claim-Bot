@@ -5,6 +5,7 @@ const config = require('./config.json')
 const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
 const claimthreadSchema = require('./schemas/claimthread-schema')
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const request = require('request')
 
