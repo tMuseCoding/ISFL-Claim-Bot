@@ -22,7 +22,7 @@ client.once('ready', async () => {
 		}
 	});
 
-	client.setInterval(checkThreads, 5000);
+	client.setInterval(checkThreads, 10000);
 });
 
 client.on('message', async message => {
