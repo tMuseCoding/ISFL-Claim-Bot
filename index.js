@@ -196,9 +196,9 @@ async function checkThreads() {
 		}
 	});
 
-console.log(threads)
+	console.log(threads)
 	threads.forEach(thread => {
-		console.log(thread.claimthread)
+		console.log(thread[2])
 	});
 
 	console.log(url)
