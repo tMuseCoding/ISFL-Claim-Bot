@@ -189,9 +189,9 @@ async function checkThreads() {
 	await mongo().then(async (mongoose) => {
 		try {
 			
-			await claimthreadSchema.find({'_id':'claimthread'}, function (err, docs) {
-				threads = docs
-			});			
+			let result = await claimthreadSchema.find()
+			threads = result
+					
 		} finally {
 			mongoose.connection.close()
 		}
