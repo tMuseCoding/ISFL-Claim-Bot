@@ -78,6 +78,8 @@ client.on('message', async message => {
 					const result = await claimthreadSchema.findOne({ _id: guild.id })
 
 					claimThreadCache[guild.id] = claimthreadData = result.claimthread
+				} catch(e) {
+					message.reply('You have to set a claimthread first! Use ct!setthread')
 				} finally {
 					mongoose.connection.close()
 				}
