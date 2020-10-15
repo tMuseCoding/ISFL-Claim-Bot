@@ -27,7 +27,7 @@ client.on('message', async message => {
 	let prefix = prefixCache[guild.id]
 
 	if (!prefix)
-		prefix = loadPrefixFromDbOrDefaultFromConfig()
+		loadPrefixFromDbOrDefaultFromConfig()
 
 	if (!content.startsWith(prefix) || author.bot) return;
 
@@ -103,7 +103,7 @@ client.on('message', async message => {
 					_id: guild.id
 				}, {
 					_id: guild.id,
-					prefix: newChannel.id,
+					prefix: args[0],
 				}, {
 					upsert: true
 				})
@@ -154,10 +154,9 @@ client.on('message', async message => {
 				prefixCache[guild.id] = config.prefix
 			} finally {
 				mongoose.connection.close()
+				prefix = prefixCache[guild.id]
 			}
 		});
-
-		return prefixCache[guild.id]
 	}
 });
 
