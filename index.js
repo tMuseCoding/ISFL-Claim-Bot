@@ -4,6 +4,7 @@ const client = new Discord.Client();
 const config = require('./config.json')
 const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
+const claimthreadSchema = require('./schemas/claimthread-schema')
 
 const prefix = config.prefix
 const claimChannelCache = {}
@@ -67,12 +68,65 @@ client.on('message', async message => {
 		}
 	}
 
-	if (command === 'claimthread') {
-		let claimthreadUrl = claimThreadCache[guild.id]
-		let claimchannelId = claimChannelCache[guild.id]
+	if (command === 'thread') {
+		let claimthreadData = claimThreadCache[guild.id]
 
-		if (!claimchannelId) {
-			claimchannelId = fetchClaimChannel
+		if (!claimthreadData) {
+			console.log('FETCHING FROM DATABASE')
+			await mongo().then(async (mongoose) => {
+				try {
+					const result = await claimthreadSchema.findOne({ _id: guild.id })
+
+					claimThreadCache[guild.id] = claimthreadData = result.claimthread
+				} finally {
+					mongoose.connection.close()
+				}
+			});
+		}
+
+		const claimthreadUrl = claimthreadData[0]
+		const claimthreadTitle = claimthreadData[1]
+
+		const embedInvite = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle(claimthreadTitle)
+			.setURL(claimthreadUrl)
+			.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
+			.setDescription('A Bot to automatically post the newest claims from the ISFL Claim Thread!')
+			.setThumbnail('https://i.imgur.com/fPW1MS5.png')
+			.setTimestamp()
+			.setFooter('Invite send at: ');
+
+		channel.send(embedInvite);
+	}
+
+	if (command === 'setthread') {
+		if (!args[0] || !args[1]) {
+			message.reply('You have to provide the URL and the Title!\neg: ct!setthread https://forums.sim-football.com/ S25-Claim-Thread')
+			return;
+		} else {
+			claimThreadCache[guild.id] = [args[0], args[1]]
+
+			await mongo().then(async (mongoose) => {
+				try {
+					await claimthreadSchema.findOneAndUpdate({
+						_id: guild.id
+					}, {
+						_id: guild.id,
+						claimthread: args[0],
+						title: args[1]
+					}, {
+						upsert: true
+					})
+					channel.send("Got it!")
+				} catch (e) {
+					console.log(e)
+					message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
+				} finally {
+					mongoose.connection.close();
+				}
+			});
+
 		}
 	}
 
@@ -80,7 +134,16 @@ client.on('message', async message => {
 		let claimchannelId = claimChannelCache[guild.id]
 
 		if (!claimchannelId) {
-			claimchannelId = fetchClaimChannel
+			console.log('FETCHING FROM DATABASE')
+			await mongo().then(async (mongoose) => {
+				try {
+					const result = await claimchannelSchema.findOne({ _id: guild.id })
+
+					claimChannelCache[guild.id] = claimchannelId = result.channelId
+				} finally {
+					mongoose.connection.close()
+				}
+			});
 		}
 
 		guild.channels.cache.get(claimchannelId).send("test")
@@ -109,21 +172,6 @@ client.on('message', async message => {
 			.setFooter('Invite send at: ');
 
 		channel.send(embedInvite);
-	}
-
-	async function fetchClaimChannel() {
-		console.log('FETCHING FROM DATABASE')
-		await mongo().then(async (mongoose) => {
-			try {
-				const result = await claimchannelSchema.findOne({ _id: guild.id })
-
-				claimChannelCache[guild.id] = result.channelId
-				
-				return result.channelId
-			} finally {
-				mongoose.connection.close()
-			}
-		});
 	}
 });
 
