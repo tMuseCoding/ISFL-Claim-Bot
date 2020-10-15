@@ -68,7 +68,7 @@ client.on('message', async message => {
 	if (command === 'claim') {
 		let data = cache[message.guild.id]
 
-		if (!data) {
+		if (data == null) {
 			fetchChannelFromDb(message)
 		}
 		
