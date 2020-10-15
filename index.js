@@ -199,13 +199,8 @@ async function checkThreads() {
 	for (let thread in threads) {
 		let url = thread[1]
 		
-		let req = request(url, {
-			method: 'HEAD',
-			followAllRedirects: true
-		}, function(err, response, body) {
-			let newUrl = response.request.href
-			console.log(`${url}\n${newUrl}\n${req}`)
-		})
+		let req = request(url)
+		console.log(req.href)
 	}
 	
 }
