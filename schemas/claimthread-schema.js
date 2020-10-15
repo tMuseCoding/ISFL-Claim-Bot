@@ -7,8 +7,8 @@ const reqString = {
 
 const claimthreadSchema = mongoose.Schema({
 	_id: reqString,
-	claimthread: reqString,
-	title: reqString
+	title: reqString,
+	lastpost: String
 })
 
 module.exports = mongoose.model('claim-threads', claimthreadSchema)

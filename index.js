@@ -10,7 +10,6 @@ const request = require('request')
 
 const prefix = config.prefix
 const claimChannelCache = {}
-const claimThreadCache = {}
 
 client.once('ready', async () => {
 	console.log('ISFL Claim Bot Loaded!');
@@ -93,38 +92,35 @@ client.on('message', async message => {
 		const claimthreadUrl = claimthreadData[0]
 		const claimthreadTitle = claimthreadData[1]
 
-		const embedInvite = new Discord.MessageEmbed()
+		const embedThread = new Discord.MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle(claimthreadTitle)
 			.setURL(claimthreadUrl)
 			.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
-			.setDescription('A Bot to automatically post the newest claims from the ISFL Claim Thread!')
-			.setThumbnail('https://i.imgur.com/fPW1MS5.png')
-			.setTimestamp()
-			.setFooter('Invite send at: ');
+			.setThumbnail('https://i.imgur.com/fPW1MS5.png');
 
-		channel.send(embedInvite);
+		channel.send(embedThread);
 	}
 
 	if (command === 'setthread') {
+		if (!author.id == '391332654399619073')
+			message.reply('Sorry bro, only tMuse the God can add a thread to be watched.')
 		if (!args[0] || !args[1]) {
 			message.reply('You have to provide the URL and the Title!\neg: ct!setthread https://forums.sim-football.com/ S25-Claim-Thread')
 			return;
 		} else {
-			claimThreadCache[guild.id] = [args[0], args[1]]
 
 			await mongo().then(async (mongoose) => {
 				try {
 					await claimthreadSchema.findOneAndUpdate({
-						_id: guild.id
+						_id: args[0]
 					}, {
-						_id: guild.id,
-						claimthread: args[0],
+						_id: args[0],
 						title: args[1]
 					}, {
 						upsert: true
 					})
-					channel.send("Got it!")
+					channel.send(`Added ${args[1]} with the url ${args[0]} to the list of watched threads`)
 				} catch (e) {
 					console.log(e)
 					message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
