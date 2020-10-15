@@ -190,22 +190,21 @@ async function checkThreads() {
 		try {
 			const result = await claimthreadSchema.find()
 
-			threads[result._id] = result
+			threads[result._id] = result.claimthread
 		} finally {
 			mongoose.connection.close()
 		}
 	});
-	
+
 	console.log(threads)
-	for (let thread in threads) {
-		console.log(thread)
-		let url = thread[2]
-		
-		console.log(url)
-		let req = request(url)
-		console.log(req.href)
-	}
-	
+	for (let thread in threads)
+	console.log(thread)
+
+	console.log(url)
+	let req = request(url)
+	console.log(req.href)
+
+
 }
 
 client.login(config.token);
