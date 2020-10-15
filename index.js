@@ -204,7 +204,7 @@ async function checkThreads() {
 		xhr.onload = function() {
 			if (xhr.status === 200) {
 				console.log("boo, we were redirected from", url, "to", xhr.responseURL)
-			}
+			} else { console.log(xhr.status)}
 		}
 	}
 	xhr.send()
