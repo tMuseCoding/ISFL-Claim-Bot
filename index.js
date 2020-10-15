@@ -199,7 +199,8 @@ async function checkThreads() {
 
 	for (const [key, value] of Object.entries(threads)) {
 		console.log(`${key}: ${value}`)
-		console.log('Object Entries Value\t' + Object.entries(value.toObject()))
+		for (const [key2, value2] of Object.entries(value.toObject()))
+			console.log(`${key}: ${value}`)
 	}
 
 
