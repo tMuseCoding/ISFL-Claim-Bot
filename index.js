@@ -200,7 +200,7 @@ async function checkThreads() {
 
 		const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0"
 
-		const _include_headers = function(body, response, resolveWithFullResponse) {
+		const _include_headers = function(response) {
 			return {
 				'finalUrl': response.request.uri.href
 			};
@@ -216,7 +216,7 @@ async function checkThreads() {
 			},
 		};
 
-		const p1 = rp(options).then((response, error, html) => {
+		rp(options).then((response) => {
 			console.log(response.finalUrl);
 		});
 	}
