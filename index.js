@@ -150,12 +150,14 @@ client.on('message', async message => {
 				const result = await prefixSchema.findOne({ _id: guild.id })
 
 				prefixCache[guild.id] = result.prefix
+			} catch(e) {
+				prefixCache[guild.id] = config.prefix
 			} finally {
 				mongoose.connection.close()
 			}
 		});
 
-		return prefixCache[guild.id] ? prefixCache[guild.id] : config.prefix
+		return prefixCache[guild.id]
 	}
 });
 
