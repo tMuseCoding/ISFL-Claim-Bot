@@ -198,9 +198,7 @@ async function checkThreads() {
 
 	console.log(threads)
 	for (let thread in threads) {
-		for (let key in thread) {
-			console.log(key)
-		}
+		console.log(thread[claimthread])
 	}
 
 	console.log(url)
