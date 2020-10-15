@@ -184,7 +184,7 @@ client.on('message', async message => {
 
 
 async function checkThreads() {
-	let threads = [{}]
+	let threads = []
 
 	await mongo().then(async (mongoose) => {
 		try {
