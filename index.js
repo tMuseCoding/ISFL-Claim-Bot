@@ -25,7 +25,7 @@ client.on('message', async message => {
 	const { channel, content, guild, author } = message
 
 	let prefix = prefixCache[guild.id]
-	
+
 	if (!prefix)
 		prefix = loadPrefixFromDbOrDefaultFromConfig()
 
@@ -144,20 +144,17 @@ client.on('message', async message => {
 	}
 
 	async function loadPrefixFromDbOrDefaultFromConfig() {
-		let prefix = prefix[guild.id]
+		console.log('FETCHING FROM DATABASE')
+		await mongo().then(async (mongoose) => {
+			try {
+				const result = await prefixSchema.findOne({ _id: guild.id })
 
-		if (!prefix) {
-			console.log('FETCHING FROM DATABASE')
-			await mongo().then(async (mongoose) => {
-				try {
-					const result = await prefixSchema.findOne({ _id: guild.id })
+				prefix[guild.id] = result.prefix
+			} finally {
+				mongoose.connection.close()
+			}
+		});
 
-					prefix[guild.id] = result.prefix
-				} finally {
-					mongoose.connection.close()
-				}
-			});
-		}
 		return prefix ? prefix[guild.id] : config.prefix
 	}
 });
