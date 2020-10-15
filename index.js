@@ -7,31 +7,33 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
-	if (!message.content.startsWith(prefix))
+	if (!message.content.startsWith(prefix) || message.author.bot)
 		return;
+	
+	let args = message.content.slice(prefix.length).trim().split(/ +/);	
+	let command = args.shift().toLowerCase();
 		
-	let messageContent = message.content.replace(prefix,'')
-		
-	if (messageContent === 'Ping') {
+	if (command === 'ping') {
 		message.channel.send('Pong!');
 	}
 	
-	if (messageContent === 'invite') {
-		replyWithInvite(message)
+	if (command === 'invite') {
+		replyWithInvite(message);
 	}
 });
 
 async function replyWithInvite(message) {
-	let invite = await message.channel.createInvite(
-		{
-		maxAge: 10*60*1000,
-		maxUses: 5
-		}
-		`Requested by ${message.author.tag}`
-	)
-	.catch(console.log);
-	
-	message.channel.send(invite ? `You can invite me with this link! ${invite}` : "There was an error creating the invite link.")
+	const embedInvite = new Discord.MessageEmbed()
+	.setColor('#0099ff')
+	.setTitle('Invite me!')
+	.setURL('https://discord.com/api/oauth2/authorize?client_id=766223518659772416&permissions=149504&scope=bot')
+	.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
+	.setDescription('A Bot to automatically post the newest claims from the ISFL Claim Thread!')
+	.setThumbnail('https://i.imgur.com/fPW1MS5.png')
+	.setTimestamp()
+	.setFooter('Invite send at: ');
+
+	message.channel.send(embedInvite);
 }
 
 client.login('NzY2MjIzNTE4NjU5NzcyNDE2.X4gPQg.KSehCG8Ld0Dvn8ItLAZbMSZM62g');
