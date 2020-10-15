@@ -198,7 +198,10 @@ async function checkThreads() {
 
 	console.log(threads)
 	for (let thread in threads) {
-		console.log(Object.values(thread))
+		thread = JSON.parse(thread)
+		console.log(thread)
+		console.log(thread["claimthread"])
+		console.log(thread.claimthread)
 	}
 
 	console.log(url)
