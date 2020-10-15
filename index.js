@@ -1,6 +1,9 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-let prefix = 'ct!';
+
+const config = require('./config.json')
+
+let prefix = config.prefix
 
 let claimChannel = null;
 
@@ -72,4 +75,4 @@ async function replyWithInvite(message) {
 	message.channel.send(embedInvite);
 }
 
-client.login('NzY2MjIzNTE4NjU5NzcyNDE2.X4gPQg.KSehCG8Ld0Dvn8ItLAZbMSZM62g');
+client.login(config.token);
