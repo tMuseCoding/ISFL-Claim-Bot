@@ -67,8 +67,10 @@ client.on('message', async message => {
 
 	if (command === 'claim') {
 		let data = cache[message.guild.id]
+		let channelId = data[0]
+		let claimChannel = message.guild.channels.cache.get(channelId)
 		
-		if (!data) {
+		if (!data || !claimChannel || !channelId) {
 			console.log('FETCHING FROM DATABASE')
 			await mongo().then(async (mongoose) => {
 				try {
@@ -80,8 +82,6 @@ client.on('message', async message => {
 				}
 			});
 		}
-		const channelId = data[0]
-		const claimChannel = message.guild.channels.cache.get(channelId)
 		
 		claimChannel.send("Posting claims in here. This is a fake claim blabla")
 	}
