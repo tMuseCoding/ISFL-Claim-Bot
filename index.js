@@ -2,13 +2,22 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 const config = require('./config.json')
+const mongo = require('./mongo')
 
 let prefix = config.prefix
 
 let claimChannel = null;
 
-client.once('ready', () => {
+client.once('ready', async () => {
 	console.log('Ping Pong Bot Loaded!');
+	
+	await mongo().then(mongoose => {
+		try {
+			console.log('Connected to mongo!');
+		} finally {
+			mongoose.connection.close();
+		}
+	}
 });
 
 client.on('message', async message => {
