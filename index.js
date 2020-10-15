@@ -20,6 +20,8 @@ client.once('ready', async () => {
 			mongoose.connection.close();
 		}
 	});
+
+	client.setInterval(checkThreads, 5000);
 });
 
 client.on('message', async message => {
@@ -78,7 +80,7 @@ client.on('message', async message => {
 					const result = await claimthreadSchema.findOne({ _id: guild.id })
 
 					claimThreadCache[guild.id] = claimthreadData = result.claimthread
-				} catch(e) {
+				} catch (e) {
 					message.reply('You have to set a claimthread first! Use ct!setthread')
 				} finally {
 					mongoose.connection.close()
@@ -174,6 +176,22 @@ client.on('message', async message => {
 			.setFooter('Invite send at: ');
 
 		channel.send(embedInvite);
+	}
+
+	async function checkThreads() {
+		let threads = {}
+
+		await mongo().then(async (mongoose) => {
+			try {
+				const result = await claimthreadSchema.find()
+
+				threads[result._id] = result
+			} finally {
+				mongoose.connection.close()
+			}
+		});
+		
+		console.log(threads)
 	}
 });
 
