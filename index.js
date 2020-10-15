@@ -199,12 +199,10 @@ async function checkThreads() {
 		let url = value.toObject()['_id']
 		console.log(`URL: ${url}`)
 		let req = new XMLHttpRequest();
-		req.onreadystatechange = function() {
-			if (req.readyState == 4 && req.status == 200) {
-				console.log(`REDIRECT: ${req.responseURL}`)
-			}
+		req.onload = function() {
+			console.log(`REDIRECT: ${req.responseURL}`)
 		}
-		req.open("GET",url+'&action=lastpost',false)
+		req.open("GET", url   '&action=lastpost', false)
 		req.send();
 	}
 
