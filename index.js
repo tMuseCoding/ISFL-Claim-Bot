@@ -11,7 +11,7 @@ let claimChannel = null;
 client.once('ready', async () => {
 	console.log('Ping Pong Bot Loaded!');
 	
-	await mongo().then(mongoose => {
+	await mongo().then((mongoose) => {
 		try {
 			console.log('Connected to mongo!');
 		} finally {
