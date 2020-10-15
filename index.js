@@ -47,6 +47,7 @@ client.on('message', async message => {
 						}).save()
 						channel.send("Found it! I will post the claims I find in here.")
 					} catch(e) {
+						console.log(e)
 						message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
 					}finally {
 						mongoose.connection.close();
