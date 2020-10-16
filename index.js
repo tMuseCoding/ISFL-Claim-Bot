@@ -169,7 +169,8 @@ client.on('message', async message => {
 		if (mention.startsWith('<@') && mention.endsWith('>')) {
 			mention = mention.slice(2, -1)
 
-			return client.guilds.cache.get(message.guild.id).roles.cache.get(mention)
+
+			return guild.roles.cache.get(mention)
 		}
 	}
 
