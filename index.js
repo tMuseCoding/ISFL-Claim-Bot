@@ -5,11 +5,13 @@ const config = require('./config.json')
 const mongo = require('./mongo')
 const claimchannelSchema = require('./schemas/claimchannel-schema')
 const claimthreadSchema = require('./schemas/claimthread-schema')
+const subscribedrolesSchema = require('./schemas/subscribedroles-schema')
 
 const rp = require('request-promise');
 
 const prefix = config.prefix
 const claimChannelCache = {}
+const subscribedroleCache = {}
 
 client.once('ready', async () => {
 	console.log('ISFL Claim Bot Loaded!');
@@ -60,6 +62,36 @@ client.on('message', async message => {
 						upsert: true
 					})
 					channel.send("Found it! I will post the claims I find in here.")
+				} catch (e) {
+					console.log(e)
+					message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
+				} finally {
+					mongoose.connection.close();
+				}
+			});
+
+		}
+	}
+
+	if (command === 'role') {
+		let newRole = getRolefromMentions(args[0])
+		if (newRole == null) {
+			message.reply("You have to ping the role! Eg. ct!role @Testrole");
+			return;
+		} else {
+			subscribedroleCache[guild.id] = newRole.id
+
+			await mongo().then(async (mongoose) => {
+				try {
+					await subscribedrolesSchema.findOneAndUpdate({
+						_id: guild.id
+					}, {
+						_id: guild.id,
+						role: newRole.id,
+					}, {
+						upsert: true
+					})
+					message.reply(`Alright I will ping ${newRole} when a new claim comes out.`)
 				} catch (e) {
 					console.log(e)
 					message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
@@ -169,7 +201,7 @@ async function checkThreads() {
 		let url = originalurl + '&action=lastpost'
 		let title = value.toObject()['title']
 		let lastpost = value.toObject()['lastpost']
-		
+
 		if (!originalurl || originalurl == "") return;
 
 		console.log(`URL: ${url} LAST POST: ${lastpost}`)
@@ -237,6 +269,19 @@ async function checkThreads() {
 				let server = client.guilds.cache.get(value.toObject()['_id'])
 				let claimchannelIdforserver = value.toObject()['channelId']
 
+				var subbedRole = ""
+
+				console.log('FETCHING FROM DATABASE')
+				await mongo().then(async (mongoose) => {
+					try {
+						let result = await subscribedrolesSchema.findOne({ _id: server.id })
+						subbedRole = result.role
+
+					} finally {
+						mongoose.connection.close()
+					}
+				});
+
 
 				const embedNewClaim = new Discord.MessageEmbed()
 					.setColor('#0099ff')
@@ -245,6 +290,7 @@ async function checkThreads() {
 					.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
 					.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't miss anything!")
 					.setThumbnail('https://i.imgur.com/fPW1MS5.png')
+					.setFooter(subbedRole == "" ? "" : `<@${subbedRole}>`)
 
 				server.channels.cache.get(claimchannelIdforserver).send(embedNewClaim)
 			}
