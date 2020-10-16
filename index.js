@@ -192,7 +192,7 @@ async function checkThreads() {
  
 		const p1 = rp(options).then((response, error, html) => {
 			fetchedPost = new RegExp("(?<=&pid=).*?(?=#pid)").exec(response.finalUrl)
-			console.log(fetchedPost);
+			console.log('FETCHED: ' + fetchedPost);
 		});
 		
 		if (lastpost == fetchedPost) {
