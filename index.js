@@ -169,6 +169,8 @@ async function checkThreads() {
 		let url = original + '&action=lastpost'
 		let title = value.toObject()['title']
 		let lastpost = value.toObject()['lastpost']
+		
+		if (!originalurl || originalurl == "") return;
 
 		console.log(`URL: ${url} LAST POST: ${lastpost}`)
 
