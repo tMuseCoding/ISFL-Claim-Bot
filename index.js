@@ -233,6 +233,8 @@ async function checkThreads() {
 			for (const value of Object.values(channels)) {
 				let server = client.guilds.cache.get(value.toObject()['_id'])
 				let claimchannelIdforserver = value.toObject()['channelId']
+				
+				console.log(`fetchedPost: ${fetchedPost}\nredirectedUrl: ${redirectedUrl}`)
 
 
 				const embedNewClaim = new Discord.MessageEmbed()
