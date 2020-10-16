@@ -169,7 +169,7 @@ client.on('message', async message => {
 		if (mention.startsWith('<@') && mention.endsWith('>')) {
 			mention = mention.slice(2, -1)
 
-
+			console.log(`FOUND ROLE: ${mention}`)
 			return guild.roles.cache.get(mention)
 		}
 	}
