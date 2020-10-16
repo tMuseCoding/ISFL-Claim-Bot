@@ -23,7 +23,7 @@ client.once('ready', async () => {
 			mongoose.connection.close();
 		}
 	});
-	client.user.setActivity('Watching Claim Threads', {type: 'WATCHING'})
+	client.user.setActivity('Claim Threads', {type: 'WATCHING'})
 	client.setInterval(checkThreads, 300000);
 });
 
