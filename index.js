@@ -307,7 +307,8 @@ async function checkThreads() {
 					.setThumbnail('https://i.imgur.com/fPW1MS5.png')
 
 				server.channels.cache.get(claimchannelIdforserver).send(embedNewClaim)
-				server.channels.cache.get(claimchannelIdforserver).send(subbedRole == "" ? "" : `<@&${subbedRole}>`)
+				if (subbedRole != "")
+					server.channels.cache.get(claimchannelIdforserver).send(`<@&${subbedRole}>`)
 			}
 		} else
 			console.log(`EMPTY!!!! fetchedPost: ${fetchedPost}\nredirectedUrl: ${redirectedUrl}`)
