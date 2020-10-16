@@ -198,55 +198,55 @@ async function checkThreads() {
 			console.log('FETCHED: ' + fetchedPost);
 		});
 
-		//if (lastpost == fetchedPost && fetchedPost != "") {
-		//	console.log('old post')
-		//} else {
-		console.log('new post')
+		if (lastpost == fetchedPost && fetchedPost != "") {
+			console.log('old post')
+		} else {
+			console.log('new post')
 
-		await mongo().then(async (mongoose) => {
-			try {
-				await claimthreadSchema.findOneAndUpdate({
-					_id: url
-				}, {
-					_id: url,
-					title: title,
-					lastpost: fetchedPost
-				}, {
-					upsert: true
-				})
-			} finally {
-				mongoose.connection.close()
+			await mongo().then(async (mongoose) => {
+				try {
+					await claimthreadSchema.findOneAndUpdate({
+						_id: url
+					}, {
+						_id: url,
+						title: title,
+						lastpost: fetchedPost
+					}, {
+						upsert: true
+					})
+				} finally {
+					mongoose.connection.close()
+				}
+			});
+
+			console.log('FETCHING FROM DATABASE')
+			await mongo().then(async (mongoose) => {
+				try {
+					let result = await claimchannelSchema.find()
+					channels = result
+
+				} finally {
+					mongoose.connection.close()
+				}
+			});
+
+			for (const value of Object.values(channels)) {
+				let server = client.guilds.cache.get(value.toObject()['_id'])
+				let claimchannelIdforserver = value.toObject()['channelId']
+
+
+				const embedNewClaim = new Discord.MessageEmbed()
+					.setColor('#0099ff')
+					.setTitle(fetchedPost)
+					.setURL(redirectedUrl)
+					.setAuthor(redirectedUrl, 'https://i.imgur.com/fPW1MS5.png')
+					.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't mis anything!")
+					.setThumbnail('https://i.imgur.com/fPW1MS5.png')
+
+				server.channels.cache.get(claimchannelIdforserver).send(embedNewClaim)
 			}
-		});
-
-		console.log('FETCHING FROM DATABASE')
-		await mongo().then(async (mongoose) => {
-			try {
-				let result = await claimchannelSchema.find()
-				channels = result
-
-			} finally {
-				mongoose.connection.close()
-			}
-		});
-
-		for (const value of Object.values(channels)) {
-			let server = client.guilds.cache.get(value.toObject()['_id'])
-			let claimchannelIdforserver = value.toObject()['channelId']
-
-
-			const embedNewClaim = new Discord.MessageEmbed()
-				.setColor('#0099ff')
-				.setTitle(fetchedPost)
-				.setURL(redirectedUrl)
-				.setAuthor(redirectedUrl, 'https://i.imgur.com/fPW1MS5.png')
-				.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't mis anything!")
-				.setThumbnail('https://i.imgur.com/fPW1MS5.png')
-
-			server.channels.cache.get(claimchannelIdforserver).send(embedNewClaim)
 		}
 	}
-	//}
 }
 
 client.login(config.token);
