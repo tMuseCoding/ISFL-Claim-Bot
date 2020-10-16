@@ -91,7 +91,7 @@ client.on('message', async message => {
 					}, {
 						upsert: true
 					})
-					message.reply(`Alright I will ping ${newRole} when a new claim comes out.`)
+					message.reply(`Alright I will ping ${newRole.name} when a new claim comes out.`)
 				} catch (e) {
 					console.log(e)
 					message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
