@@ -166,7 +166,7 @@ async function checkThreads() {
 
 	for (const value of Object.values(threads)) {
 		let originalurl = value.toObject()['_id']
-		let url = original + '&action=lastpost'
+		let url = originalurl + '&action=lastpost'
 		let title = value.toObject()['title']
 		let lastpost = value.toObject()['lastpost']
 		
