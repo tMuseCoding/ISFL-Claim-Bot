@@ -195,7 +195,7 @@ async function checkThreads() {
 			},
 		};
 
-		rp(options).then((response) => {
+		await rp(options).then((response) => {
 			redirectedUrl = response.finalUrl
 			fetchedPost = new RegExp("(?<=&pid=).*?(?=#pid)").exec(redirectedUrl)
 			console.log('FETCHED: ' + fetchedPost);
