@@ -24,7 +24,7 @@ client.once('ready', async () => {
 		}
 	});
 
-	client.setInterval(checkThreads, 30000);
+	client.setInterval(checkThreads, 300000);
 });
 
 client.on('message', async message => {
