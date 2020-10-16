@@ -198,7 +198,7 @@ async function checkThreads() {
 		await rp(options).then((response) => {
 			redirectedUrl = response.finalUrl
 			fetchedPost = new RegExp("(?<=&pid=).*?(?=#pid)").exec(redirectedUrl)
-			console.log('FETCHED: ' + fetchedPost);
+			console.log('FETCHED: ' + fetchedPost[0]);
 		});
 
 		if (lastpost == fetchedPost && fetchedPost != "") {
@@ -213,7 +213,7 @@ async function checkThreads() {
 					}, {
 						_id: originalurl,
 						title: title,
-						lastpost: fetchedPost
+						lastpost: fetchedPost[0]
 					}, {
 						upsert: true
 					})
