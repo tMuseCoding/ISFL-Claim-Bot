@@ -303,9 +303,9 @@ async function checkThreads() {
 					.setTitle(`${title} - New Claim Available!`)
 					.setURL(redirectedUrl)
 					.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
-					.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't miss anything!")
+					.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't miss anything!\n" + subbedRole == "" ? "" : `<@&${subbedRole}>`)
 					.setThumbnail('https://i.imgur.com/fPW1MS5.png')
-					.setFooter(subbedRole == "" ? "" : `<@&${subbedRole}>`)
+					.setFooter()
 
 				server.channels.cache.get(claimchannelIdforserver).send(embedNewClaim)
 			}
