@@ -200,7 +200,7 @@ async function checkThreads() {
 
 		if (lastpost == fetchedPost && fetchedPost != "") {
 			console.log('old post')
-		} else if (redirectedUrl != "" && fetchedPost != ""){
+		} else if (redirectedUrl != "" && fetchedPost != "") {
 			console.log('new post')
 
 			await mongo().then(async (mongoose) => {
@@ -233,7 +233,7 @@ async function checkThreads() {
 			for (const value of Object.values(channels)) {
 				let server = client.guilds.cache.get(value.toObject()['_id'])
 				let claimchannelIdforserver = value.toObject()['channelId']
-				
+
 				console.log(`fetchedPost: ${fetchedPost}\nredirectedUrl: ${redirectedUrl}`)
 
 
@@ -247,7 +247,8 @@ async function checkThreads() {
 
 				server.channels.cache.get(claimchannelIdforserver).send(embedNewClaim)
 			}
-		}
+		} else
+			console.log(`EMPTY!!!! fetchedPost: ${fetchedPost}\nredirectedUrl: ${redirectedUrl}`)
 	}
 }
 
