@@ -22,7 +22,7 @@ client.once('ready', async () => {
 		}
 	});
 
-	client.setInterval(checkThreads, 10000);
+	client.setInterval(checkThreads, 30000);
 });
 
 client.on('message', async message => {
@@ -69,37 +69,6 @@ client.on('message', async message => {
 			});
 
 		}
-	}
-
-	if (command === 'thread') {
-		let claimthreadData = claimThreadCache[guild.id]
-
-		if (!claimthreadData) {
-			console.log('FETCHING FROM DATABASE')
-			await mongo().then(async (mongoose) => {
-				try {
-					const result = await claimthreadSchema.findOne({ _id: guild.id })
-
-					claimThreadCache[guild.id] = claimthreadData = result.claimthread
-				} catch (e) {
-					message.reply('You have to set a claimthread first! Use ct!setthread')
-				} finally {
-					mongoose.connection.close()
-				}
-			});
-		}
-
-		const claimthreadUrl = claimthreadData[0]
-		const claimthreadTitle = claimthreadData[1]
-
-		const embedThread = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle(claimthreadTitle)
-			.setURL(claimthreadUrl)
-			.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
-			.setThumbnail('https://i.imgur.com/fPW1MS5.png');
-
-		channel.send(embedThread);
 	}
 
 	if (command === 'setthread') {
@@ -185,7 +154,6 @@ async function checkThreads() {
 
 	await mongo().then(async (mongoose) => {
 		try {
-
 			let result = await claimthreadSchema.find()
 			threads = result
 
@@ -196,7 +164,10 @@ async function checkThreads() {
 
 	for (const value of Object.values(threads)) {
 		let url = value.toObject()['_id'] + '&action=lastpost'
-		console.log(`URL: ${url}`)
+		let lastpost = value.toObject()['lastpost']
+		let fetchedPost = ""
+		
+		console.log(`URL: ${url} LAST POST: ${lastpost}`)
 
 		const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0"
 		
@@ -218,10 +189,17 @@ async function checkThreads() {
 				'User-Agent': userAgent
 			},
 		};
-
+ 
 		const p1 = rp(options).then((response, error, html) => {
-			console.log(response.finalUrl);
+			fetchedPost = new RegExp("(?<=&pid=).*?(?=#pid)").exec(response.finalUrl)
+			console.log(fetchedPost);
 		});
+		
+		if (lastpost == fetchedPost) {
+			console.log('old post')
+		} else {
+			console.log('new post')
+		}
 	}
 }
 
