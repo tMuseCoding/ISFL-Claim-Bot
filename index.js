@@ -149,7 +149,7 @@ client.on('message', async message => {
 
 
 
-async function checkThreads(client) {
+async function checkThreads() {
 	let threads
 
 	await mongo().then(async (mongoose) => {
