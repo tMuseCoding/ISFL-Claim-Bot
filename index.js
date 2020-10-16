@@ -32,17 +32,18 @@ client.on('message', async message => {
 
 	if (!content.startsWith(prefix) || author.bot) return;
 
+	let args = content.slice(prefix.length).trim().split(/ +/);
+	let command = args.shift().toLowerCase();
+
 	if (command === 'invite') {
 		replyWithInvite(channel);
+		return;
 	}
 
 	if (message.member.hasPermission("ADMINISTRATOR")) {
 		message.reply("You have to be a server admin to set me up.")
 		return;
 	}
-
-	let args = content.slice(prefix.length).trim().split(/ +/);
-	let command = args.shift().toLowerCase();
 
 	if (command === 'channel') {
 		let newChannel = getChannelFromMention(args[0])
