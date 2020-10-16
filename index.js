@@ -151,6 +151,8 @@ client.on('message', async message => {
 
 async function checkThreads() {
 	let threads
+		let fetchedPost
+		let redirectedUrl
 
 	await mongo().then(async (mongoose) => {
 		try {
@@ -166,8 +168,6 @@ async function checkThreads() {
 		let url = value.toObject()['_id'] + '&action=lastpost'
 		let title = value.toObject()['title']
 		let lastpost = value.toObject()['lastpost']
-		let fetchedPost = ""
-		let redirectedUrl = ""
 
 		console.log(`URL: ${url} LAST POST: ${lastpost}`)
 
@@ -192,7 +192,7 @@ async function checkThreads() {
 			},
 		};
 
-		const p1 = rp(options).then((response, error, html) => {
+		rp(options).then((response) => {
 			redirectedUrl = response.finalUrl
 			fetchedPost = new RegExp("(?<=&pid=).*?(?=#pid)").exec(redirectedUrl)
 			console.log('FETCHED: ' + fetchedPost);
