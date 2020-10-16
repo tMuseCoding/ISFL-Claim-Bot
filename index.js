@@ -247,5 +247,6 @@ async function checkThreads(client) {
 			}
 		}
 	}
+}
 
-	client.login(config.token);
+client.login(config.token);
