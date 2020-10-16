@@ -237,15 +237,13 @@ async function checkThreads() {
 				let server = client.guilds.cache.get(value.toObject()['_id'])
 				let claimchannelIdforserver = value.toObject()['channelId']
 
-				console.log(`fetchedPost: ${fetchedPost}\nredirectedUrl: ${redirectedUrl}`)
-
 
 				const embedNewClaim = new Discord.MessageEmbed()
 					.setColor('#0099ff')
-					.setTitle(fetchedPost)
+					.setTitle(`${title} - New Claim Available!`)
 					.setURL(redirectedUrl)
-					.setAuthor(redirectedUrl, 'https://i.imgur.com/fPW1MS5.png')
-					.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't mis anything!")
+					.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
+					.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't miss anything!")
 					.setThumbnail('https://i.imgur.com/fPW1MS5.png')
 
 				server.channels.cache.get(claimchannelIdforserver).send(embedNewClaim)
