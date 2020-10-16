@@ -149,7 +149,7 @@ client.on('message', async message => {
 
 
 
-async function checkThreads() {
+async function checkThreads(client) {
 	let threads
 
 	await mongo().then(async (mongoose) => {
@@ -219,33 +219,33 @@ async function checkThreads() {
 				}
 			});
 
+			console.log('FETCHING FROM DATABASE')
+			await mongo().then(async (mongoose) => {
+				try {
+					let result = await claimchannelSchema.find()
+					channels = result
 
-			let claimchannelId = claimChannelCache[guild.id]
+				} finally {
+					mongoose.connection.close()
+				}
+			});
 
-			if (!claimchannelId) {
-				console.log('FETCHING FROM DATABASE')
-				await mongo().then(async (mongoose) => {
-					try {
-						const result = await claimchannelSchema.findOne({ _id: guild.id })
+			for (const value of Object.values(channels)) {
+				let guild = value.toObject()['_id']
+				let channel = value.toObject()['channelId']
 
-						claimChannelCache[guild.id] = claimchannelId = result.channelId
-					} finally {
-						mongoose.connection.close()
-					}
-				});
+
+				const embedNewClaim = new Discord.MessageEmbed()
+					.setColor('#0099ff')
+					.setTitle('New Claim Available!')
+					.setURL(redirectedUrl)
+					.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
+					.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't mis anything!")
+					.setThumbnail('https://i.imgur.com/fPW1MS5.png')
+
+				client.guilds.cache.get(guild).channels.cache.get(channel).send(embedNewClaim)
 			}
-
-			const embedNewClaim = new Discord.MessageEmbed()
-				.setColor('#0099ff')
-				.setTitle('New Claim Available!')
-				.setURL(redirectedUrl)
-				.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
-				.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't mis anything!")
-				.setThumbnail('https://i.imgur.com/fPW1MS5.png')
-
-			guild.channels.cache.get(claimchannelId).send(embedNewClaim)
 		}
 	}
-}
 
-client.login(config.token);
+	client.login(config.token);
