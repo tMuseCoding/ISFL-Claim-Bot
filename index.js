@@ -151,8 +151,8 @@ client.on('message', async message => {
 
 async function checkThreads() {
 	let threads
-		let fetchedPost
-		let redirectedUrl
+	var fetchedPost = ""
+	var redirectedUrl = ""
 
 	await mongo().then(async (mongoose) => {
 		try {
