@@ -237,9 +237,9 @@ async function checkThreads() {
 
 			const embedNewClaim = new Discord.MessageEmbed()
 				.setColor('#0099ff')
-				.setTitle('New Claim Available!')
+				.setTitle(fetchedPost)
 				.setURL(redirectedUrl)
-				.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
+				.setAuthor(redirectedUrl, 'https://i.imgur.com/fPW1MS5.png')
 				.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't mis anything!")
 				.setThumbnail('https://i.imgur.com/fPW1MS5.png')
 
