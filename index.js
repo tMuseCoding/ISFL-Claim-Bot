@@ -74,7 +74,7 @@ client.on('message', async message => {
 	}
 
 	if (command === 'role') {
-		let newRole = getRolefromMentions(args[0])
+		let newRole = getRoleFromMention(args[0])
 		if (newRole == null) {
 			message.reply("You have to ping the role! Eg. ct!role @Testrole");
 			return;
@@ -160,6 +160,16 @@ client.on('message', async message => {
 			mention = mention.slice(2, -1)
 
 			return client.channels.cache.get(mention)
+		}
+	}
+
+	function getRoleFromMention(mention) {
+		if (!mention) return;
+
+		if (mention.startsWith('<@') && mention.endsWith('>')) {
+			mention = mention.slice(2, -1)
+
+			return client.guilds.cache.get(message.guild.id).roles.cache.get(mention)
 		}
 	}
 
