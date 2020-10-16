@@ -289,7 +289,8 @@ async function checkThreads() {
 				await mongo().then(async (mongoose) => {
 					try {
 						let result = await subscribedrolesSchema.findOne({ _id: server.id })
-						subbedRole = result.role
+						if (result)
+							subbedRole = result.role
 
 					} finally {
 						mongoose.connection.close()
@@ -304,7 +305,7 @@ async function checkThreads() {
 					.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
 					.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't miss anything!")
 					.setThumbnail('https://i.imgur.com/fPW1MS5.png')
-					.setFooter(subbedRole == "" ? "" : `<@${subbedRole}>`)
+					.setFooter(subbedRole == "" ? "" : `<@&${subbedRole}>`)
 
 				server.channels.cache.get(claimchannelIdforserver).send(embedNewClaim)
 			}
