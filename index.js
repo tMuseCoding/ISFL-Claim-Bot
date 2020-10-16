@@ -200,7 +200,7 @@ async function checkThreads() {
 
 		if (lastpost == fetchedPost && fetchedPost != "") {
 			console.log('old post')
-		} else {
+		} else if (redirectedUrl != "" && fetchedPost != ""){
 			console.log('new post')
 
 			await mongo().then(async (mongoose) => {
