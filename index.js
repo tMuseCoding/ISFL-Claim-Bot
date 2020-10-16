@@ -32,16 +32,17 @@ client.on('message', async message => {
 
 	if (!content.startsWith(prefix) || author.bot) return;
 
-	let args = content.slice(prefix.length).trim().split(/ +/);
-	let command = args.shift().toLowerCase();
-
-	if (command === 'ping') {
-		channel.send('Pong!');
-	}
-
 	if (command === 'invite') {
 		replyWithInvite(channel);
 	}
+
+	if (message.member.hasPermission("ADMINISTRATOR")) {
+		message.reply("You have to be a server admin to set me up.")
+		return;
+	}
+
+	let args = content.slice(prefix.length).trim().split(/ +/);
+	let command = args.shift().toLowerCase();
 
 	if (command === 'channel') {
 		let newChannel = getChannelFromMention(args[0])
@@ -132,25 +133,6 @@ client.on('message', async message => {
 			});
 
 		}
-	}
-
-	if (command === 'claim') {
-		let claimchannelId = claimChannelCache[guild.id]
-
-		if (!claimchannelId) {
-			console.log('FETCHING FROM DATABASE')
-			await mongo().then(async (mongoose) => {
-				try {
-					const result = await claimchannelSchema.findOne({ _id: guild.id })
-
-					claimChannelCache[guild.id] = claimchannelId = result.channelId
-				} finally {
-					mongoose.connection.close()
-				}
-			});
-		}
-
-		guild.channels.cache.get(claimchannelId).send("test")
 	}
 
 	function getChannelFromMention(mention) {
