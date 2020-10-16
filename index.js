@@ -166,11 +166,12 @@ async function checkThreads() {
 		let url = value.toObject()['_id'] + '&action=lastpost'
 		let lastpost = value.toObject()['lastpost']
 		let fetchedPost = ""
-		
+		let redirectedUrl = ""
+
 		console.log(`URL: ${url} LAST POST: ${lastpost}`)
 
 		const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0"
-		
+
 		const _include_headers = function(body, response, resolveWithFullResponse) {
 			return {
 				'headers': response.headers,
@@ -189,16 +190,59 @@ async function checkThreads() {
 				'User-Agent': userAgent
 			},
 		};
- 
+
 		const p1 = rp(options).then((response, error, html) => {
-			fetchedPost = new RegExp("(?<=&pid=).*?(?=#pid)").exec(response.finalUrl)[0]
+			redirectedUrl = response.finalUrl
+			fetchedPost = new RegExp("(?<=&pid=).*?(?=#pid)").exec(redirectedUrl)
 			console.log('FETCHED: ' + fetchedPost);
 		});
-		
-		if (lastpost == fetchedPost) {
+
+		if (lastpost == fetchedPost && fetchedPost != "") {
 			console.log('old post')
 		} else {
 			console.log('new post')
+
+			await mongo().then(async (mongoose) => {
+				try {
+					await claimthreadSchema.findOneAndUpdate({
+						_id: args[0]
+					}, {
+						_id: args[0],
+						title: args[1],
+						lastpost: fetchedPost
+					}, {
+						upsert: true
+					})
+				} finally {
+					mongoose.connection.close()
+				}
+			});
+
+
+			let claimchannelId = claimChannelCache[guild.id]
+
+			if (!claimchannelId) {
+				console.log('FETCHING FROM DATABASE')
+				await mongo().then(async (mongoose) => {
+					try {
+						const result = await claimchannelSchema.findOne({ _id: guild.id })
+
+						claimChannelCache[guild.id] = claimchannelId = result.channelId
+					} finally {
+						mongoose.connection.close()
+					}
+				});
+			}
+
+			const embedNewClaim = new Discord.MessageEmbed()
+				.setColor('#0099ff')
+				.setTitle('New Claim Available!')
+				.setURL(redirectedUrl)
+				.setAuthor('ISFL Claim Thread Watcher', 'https://i.imgur.com/fPW1MS5.png')
+				.setDescription("I only check the thread every 5 minutes. Scroll up to make sure you don't mis anything!")
+				.setThumbnail('https://i.imgur.com/fPW1MS5.png')
+
+			guild.channels.cache.get(claimchannelId).send(embedNewClaim)
 		}
 	}
 }
