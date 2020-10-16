@@ -63,7 +63,7 @@ client.on('message', async message => {
 					}, {
 						upsert: true
 					})
-					channel.send("Found it! I will post the claims I find in here.")
+					channel.send(`Found it! I will post the claims I find in ${newChannel}.`)
 				} catch (e) {
 					console.log(e)
 					message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
