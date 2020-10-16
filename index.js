@@ -164,6 +164,7 @@ async function checkThreads() {
 
 	for (const value of Object.values(threads)) {
 		let url = value.toObject()['_id'] + '&action=lastpost'
+		let title = value.toObject()['title']
 		let lastpost = value.toObject()['lastpost']
 		let fetchedPost = ""
 		let redirectedUrl = ""
@@ -205,10 +206,10 @@ async function checkThreads() {
 			await mongo().then(async (mongoose) => {
 				try {
 					await claimthreadSchema.findOneAndUpdate({
-						_id: args[0]
+						_id: url
 					}, {
-						_id: args[0],
-						title: args[1],
+						_id: url,
+						title: title,
 						lastpost: fetchedPost
 					}, {
 						upsert: true
