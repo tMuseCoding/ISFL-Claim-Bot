@@ -40,7 +40,7 @@ client.on('message', async message => {
 		return;
 	}
 
-	if (message.member.hasPermission("ADMINISTRATOR")) {
+	if (!message.member.hasPermission("ADMINISTRATOR")) {
 		message.reply("You have to be a server admin to set me up.")
 		return;
 	}
