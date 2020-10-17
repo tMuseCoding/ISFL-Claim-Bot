@@ -179,7 +179,7 @@ client.on('message', async message => {
 
 
 async function checkThreads() {
-	let threads
+	var threads
 	var fetchedPost = ""
 	var redirectedUrl = ""
 
