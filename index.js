@@ -23,7 +23,7 @@ client.once('ready', async () => {
 			mongoose.connection.close();
 		}
 	});
-	client.user.setActivity('Claim Threads', {type: 'WATCHING'})
+	client.user.setActivity('Claim Threads', { type: 'WATCHING' })
 	client.setInterval(checkThreads, 300000);
 });
 
@@ -183,6 +183,8 @@ async function checkThreads() {
 	var fetchedPost = ""
 	var redirectedUrl = ""
 
+	console.log("checking thread")
+
 	await mongo().then(async (mongoose) => {
 		try {
 			let result = await claimthreadSchema.find()
@@ -199,7 +201,11 @@ async function checkThreads() {
 		let title = value.toObject()['title']
 		let lastpost = value.toObject()['lastpost']
 
-		if (!originalurl || originalurl == "") return;
+		if (!originalurl || originalurl == "") {
+			console.log(originalurl)
+			return;
+		}
+
 
 		console.log(`URL: ${url} LAST POST: ${lastpost}`)
 
