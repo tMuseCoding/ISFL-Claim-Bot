@@ -243,15 +243,10 @@ async function checkThreads() {
 
 			await mongo().then(async (mongoose) => {
 				try {
-					await claimthreadSchema.findOneAndUpdate({
-						_id: originalurl
-					}, {
-						_id: originalurl,
-						title: title,
-						lastpost: fetchedPost[0]
-					}, {
-						upsert: true
-					})
+					await claimthreadSchema.updateOne(
+						{ _id: originalurl },
+						{ lastpost: fetchedPost[0] }
+					)
 				} finally {
 					mongoose.connection.close()
 				}
