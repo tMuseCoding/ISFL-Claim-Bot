@@ -112,7 +112,10 @@ client.on('message', async message => {
 			message.reply('You have to provide the URL and the Title!\neg: ct!setthread https://forums.sim-football.com/ S25-Claim-Thread')
 			return;
 		} else {
-
+			var post = args[2]
+			if (!post) {
+				post = ""
+				}
 			await mongo().then(async (mongoose) => {
 				try {
 					await claimthreadSchema.findOneAndUpdate({
@@ -120,7 +123,7 @@ client.on('message', async message => {
 					}, {
 						_id: args[0],
 						title: args[1],
-						lastpost: ""
+						lastpost: post
 					}, {
 						upsert: true
 					})
