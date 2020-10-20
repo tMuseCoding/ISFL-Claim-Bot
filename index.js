@@ -251,7 +251,7 @@ async function checkThreads() {
 				try {
 					await claimthreadSchema.updateOne(
 						{ _id: originalurl },
-						{ lastpost: fetchedPost[0] }
+						{$set: {lastpost: fetchedPost[0] }}
 					)
 				} finally {
 					mongoose.connection.close()
