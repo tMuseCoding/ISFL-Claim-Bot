@@ -127,7 +127,10 @@ client.on('message', async message => {
 					}, {
 						upsert: true
 					})
-					channel.send(`Added ${args[1]} with the url ${args[0]} to the list of watched threads`)
+					let message = `Added ${args[1]} with the url ${args[0]} to the list of watched threads`
+					if (post)
+						message +=` last post is ${post}`
+					channel.send(message)
 				} catch (e) {
 					console.log(e)
 					message.reply("Something went wrong! Try again.\nIf you keep seeing this error there might be a problem with the bot.")
