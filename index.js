@@ -50,6 +50,7 @@ client.on('message', async message => {
 		helpmessage = helpmessage + 'Only ct!invite and ct!help may be used by non server admins. Every other command needs to be performed by a server admin.'
 
 		channel.send(helpmessage)
+		return;
 	}
 
 	if (!message.member.hasPermission("ADMINISTRATOR")) {
