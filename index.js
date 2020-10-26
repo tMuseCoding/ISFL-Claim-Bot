@@ -39,6 +39,18 @@ client.on('message', async message => {
 		replyWithInvite(channel);
 		return;
 	}
+	
+	
+	if (command === 'help') {
+		var helpmessage = '```ct!help - displays this exact code block... why did I put this here?\nct!permissions - a list of permissions you need for the bot to work flawlessly\n'
+		helpmessage = helpmessage + 'ct!channel #YOUR-CHANNEL - set a channel to send the posts in\n'
+		helpmessage = helpmessage + 'ct!role @.ROLE (Yes you have to ping them once!)- set a role to be pinged when a new claim is available, you don\'t have to specify a role if you don\'t want any ping\n'
+		helpmessage = helpmessage + 'ct!invite - get the invite link\n'
+		helpmessage = helpmessage + 'ct!checkpermissions - checks if any permissions in the current channel are missing```'
+		helpmessage = helpmessage + 'Only ct!invite and ct!help may be used by non server admins. Every other command needs to be performed by a server admin.'
+
+		channel.send(helpmessage)
+	}
 
 	if (!message.member.hasPermission("ADMINISTRATOR")) {
 		message.reply("You have to be a server admin to set me up.")
@@ -148,16 +160,6 @@ client.on('message', async message => {
 		mes = mes + 'if ANY of those permissions is missing the bot is unable to send any claims.\n\n'
 		mes = mes + '***Make sure the bot has these permissions while you set it up!***'
 		channel.send(mes)
-	}
-	
-	if (command === 'help') {
-		var helpmessage = '```ct!help - displays this exact code block... why did I put this here?\nct!permissions - a list of permissions you need for the bot to work flawlessly\n'
-		helpmessage = helpmessage + 'ct!channel #YOUR-CHANNEL - set a channel to send the posts in\n'
-		helpmessage = helpmessage + 'ct!role @.ROLE (Yes you have to ping them once!)- set a role to be pinged when a new claim is available, you don\'t have to specify a role if you don\'t want any ping\n'
-		helpmessage = helpmessage + 'ct!invite - get the invite link\n'
-		helpmessage = helpmessage + 'ct!checkpermissions - checks if any permissions in the current channel are missing```'
-
-		channel.send(helpmessage)
 	}
 	
 	if (command === 'checkpermissions') {
