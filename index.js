@@ -158,6 +158,12 @@ client.on('message', async message => {
 
 		channel.send(helpmessage)
 	}
+	
+	if (command === 'checkpermissions') {
+		const permissions = botPermissionsFor = channel.permissionsFor(guild.me)
+		
+		channel.send(permissions.toArray())
+	}
 
 	function getChannelFromMention(mention) {
 		if (!mention) return;
