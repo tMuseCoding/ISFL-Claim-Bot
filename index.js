@@ -166,7 +166,7 @@ client.on('message', async message => {
 		
 		var missingperm = ''
 		
-		if (!permmissions.toArray().includes(embedperm)) {
+		if (!permissions.toArray().includes(embedperm)) {
 			missingperm = missingperm + 'I can\'t embed links in here - I need the permission ***Embed Links***\n'
 		}
 		
