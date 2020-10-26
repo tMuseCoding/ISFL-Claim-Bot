@@ -177,6 +177,8 @@ client.on('message', async message => {
 		if (missingperm) {
 			missingperm = missingperm + 'For more information, use ct!permissions'
 			channel.send(missingperm)
+		} else {
+			channel.send('all permissions are set!')
 		}
 	}
 
