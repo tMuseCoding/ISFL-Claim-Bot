@@ -161,8 +161,23 @@ client.on('message', async message => {
 	
 	if (command === 'checkpermissions') {
 		const permissions = botPermissionsFor = channel.permissionsFor(guild.me)
+		const embedperm = 'EMBED_LINKS'
+		const mentionperm = 'MENTION_EVERYONE'
 		
-		channel.send(permissions.toArray())
+		var missingperm = ''
+		
+		if (!permmissions.toArray().includes(embedperm)) {
+			missingperm = missingperm + 'I can\'t embed links in here - I need the permission ***Embed Links***\n'
+		}
+		
+		if (!permissions.toArray().includes(mentionperm)) {
+			missingperm = missingperm + 'I can\'t mention people in here - I need the permission ***Mention @.everyone, @.here, and All Roles***\n'
+		}
+		
+		if (missingperm) {
+			missingperm = missingperm + 'For more information, use ct!permissions'
+			channel.send(missingperm)
+		}
 	}
 
 	function getChannelFromMention(mention) {
