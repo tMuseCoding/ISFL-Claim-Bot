@@ -149,6 +149,15 @@ client.on('message', async message => {
 		mes = mes + '***Make sure the bot has these permissions while you set it up!***'
 		channel.send(mes)
 	}
+	
+	if (command === 'help') {
+		var helpmessage = '```ct!help - displays basically this code block\nct!permissions - a list of permissions you need for the bot to work flawlessly'
+		helpmessage = helpmessage + 'ct!channel #YOUR-CHANNEL - set a channel to send the posts in\n'
+		helpmessage = helpmessage + 'ct!role @.ROLE - set a role to be pinged when a new claim is available, you don\'t have to specify a role if you don\'t want any ping\n'
+		helpmessage = helpmessage + 'ct!invite - get the invite link```'
+
+		channel.send(helpmessage)
+	}
 
 	function getChannelFromMention(mention) {
 		if (!mention) return;
