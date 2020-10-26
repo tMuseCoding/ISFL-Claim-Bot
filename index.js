@@ -151,9 +151,9 @@ client.on('message', async message => {
 	}
 	
 	if (command === 'help') {
-		var helpmessage = '```ct!help - displays basically this code block\nct!permissions - a list of permissions you need for the bot to work flawlessly'
+		var helpmessage = '```ct!help - displays this exact code block... why did I put this here?\nct!permissions - a list of permissions you need for the bot to work flawlessly\n'
 		helpmessage = helpmessage + 'ct!channel #YOUR-CHANNEL - set a channel to send the posts in\n'
-		helpmessage = helpmessage + 'ct!role @.ROLE - set a role to be pinged when a new claim is available, you don\'t have to specify a role if you don\'t want any ping\n'
+		helpmessage = helpmessage + 'ct!role @.ROLE (Yes you have to ping them once!)- set a role to be pinged when a new claim is available, you don\'t have to specify a role if you don\'t want any ping\n'
 		helpmessage = helpmessage + 'ct!invite - get the invite link```'
 
 		channel.send(helpmessage)
