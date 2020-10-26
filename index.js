@@ -141,6 +141,14 @@ client.on('message', async message => {
 
 		}
 	}
+	
+	if (command === 'permissions') {
+		var mes = 'To use the ISFL Claim Thread Watcher you have to set the permissions for the channel you want the bot to post in.\n'
+		mes = mes + 'The permissions needed are:\n***Read Messages***\n***Send Messages***\n***Embed Links***\n***Mention @everyone, @here, and All Roles***\n'
+		mes = mes + 'if ANY of those permissions is missing the bot is unable to send any claims.\n\n'
+		mes = mes + '***Make sure the bot has these permissions while you set it up!***'
+		channel.send(mes)
+	}
 
 	function getChannelFromMention(mention) {
 		if (!mention) return;
