@@ -349,4 +349,4 @@ async function checkThreads() {
 	}
 }
 
-client.login(config.token);
+client.login(process.env.CLAIM_BOT_TOKEN)
